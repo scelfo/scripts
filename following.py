@@ -11,8 +11,13 @@ to follow.
 
 __author__ = 'scelfo@gmail.com (Tony Scelfo)'
 
+
 import json
 import sys
+
+
+PROFILE_CARD_IFRAME= '<iframe width="301px" src="http://www.google.com/s2/u/0/widgets/ProfileCard?uid=%s&bc=0" frameborder="0"></iframe>'
+
 
 def main(argv):
   if len(argv) < 2:
@@ -31,7 +36,7 @@ def main(argv):
       # Friends can have more than one profileId, the first seems to be the
       # one that google+ wants.
       id = friend['profileIds'][0]
-      print '%s: https://plus.google.com/%s' % (friend['displayName'], id)
+      print PROFILE_CARD_IFRAME % id
 
 if __name__ == '__main__':
   main(sys.argv)
