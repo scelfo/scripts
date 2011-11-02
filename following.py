@@ -13,6 +13,19 @@ __author__ = 'scelfo@gmail.com (Tony Scelfo)'
 
 import json
 import sys
+import optparse
+
+
+parser = optparse.OptionParser()
+parser.set_usage(
+    'following.py [options] followers.json\n\n'
+    'Download followers.json from:\n'
+    'http://www.google.com/reader/api/0/friend/list'
+    '?filename=followers.json&output=json&lookup=FOLLOWERS')
+parser.add_option('-o', '--output', dest='output', default='text',
+                  choices=['text', 'html'],
+                  help='(optional) Output format, default: text')
+(options, args) = parser.parse_args()
 
 
 NAME_AND_PROFILE = '%s: https://plus.google.com/%s'
@@ -25,12 +38,10 @@ PROFILE_CARD_IFRAME = (
 
 def main(argv):
   if len(argv) < 2:
-    print 'must specify an input file'
+    print 'pass -h to see usage'
     sys.exit()
 
-  input_file = argv[1]
-
-  print 'Going to read from %s...' % input_file
+  input_file = argv[len(argv) - 1]
 
   f = open(input_file, 'r')
   parsed_json = json.load(f)
@@ -40,7 +51,7 @@ def main(argv):
       # Friends can have more than one profileId, the first seems to be the
       # one that google+ wants.
       id = friend['profileIds'][0]
-      if True:
+      if options.output == 'html':
         print PROFILE_CARD_IFRAME % id
       else:
         print NAME_AND_PROFILE % (friend['displayName'], id)
